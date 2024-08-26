@@ -4,7 +4,8 @@ const CHARACTER_SETS = {
   letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
   numbers: '0123456789'
 };
-
+const passwordTextarea = document.getElementById('password');
+passwordTextarea.placeholder = 'WHITE HAT WOLF';
 const passwordLengthInput = document.getElementById('password-length');
 const characterSetSelect = document.getElementById('character-set');
 const generateButton = document.getElementById('generate');
@@ -12,9 +13,12 @@ const copyButton = document.getElementById('copy');
 const passwordTextarea = document.getElementById('password');
 const passwordStrengthElement = document.getElementById('password-strength');
 const passwordHintElement = document.getElementById('password-hint');
+const scrollerCheckbox = document.getElementById('scroller');
+let scrollerInterval = null; // declare scrollerInterval as a let variable
 
 generateButton.addEventListener('click', generatePassword);
 copyButton.addEventListener('click', copyPassword);
+scrollerCheckbox.addEventListener('change', toggleScroller);
 
 function generatePassword() {
   const passwordLength = parseInt(passwordLengthInput.value);
@@ -31,7 +35,7 @@ function generatePassword() {
   }
 
   const characters = CHARACTER_SETS[characterSet];
-  const password = generatePasswordString(passwordLength, characters);
+  let password = generatePasswordString(passwordLength, characters);
 
   passwordTextarea.value = password;
 
@@ -84,6 +88,8 @@ function getPasswordStrength(password) {
       return 'Strong';
     case 5:
       return 'Very Strong';
+    default:
+      return 'Unknown'; // add a default case
   }
 }
 
@@ -99,5 +105,16 @@ function getPasswordHint(passwordStrength) {
       return 'Your password is strong, but you can still make it more complex.';
     case 'Very Strong':
       return 'Your password is very strong, good job!';
+    default:
+      return 'Unknown'; // add a default case
+  }
+}
+
+function toggleScroller() {
+  const useScroller = scrollerCheckbox.checked;
+  if (useScroller) {
+    scrollerInterval = setInterval(generatePassword, 1000); // generate a new password every 1 second
+  } else {
+    clearInterval(scrollerInterval);
   }
 }
