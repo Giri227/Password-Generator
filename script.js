@@ -4,17 +4,19 @@ const CHARACTER_SETS = {
   letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
   numbers: '0123456789'
 };
+
 const passwordTextarea = document.getElementById('password');
 passwordTextarea.placeholder = 'WHITE HAT WOLF';
+
 const passwordLengthInput = document.getElementById('password-length');
 const characterSetSelect = document.getElementById('character-set');
 const generateButton = document.getElementById('generate');
 const copyButton = document.getElementById('copy');
-const passwordTextarea = document.getElementById('password');
 const passwordStrengthElement = document.getElementById('password-strength');
 const passwordHintElement = document.getElementById('password-hint');
 const scrollerCheckbox = document.getElementById('scroller');
-let scrollerInterval = null; // declare scrollerInterval as a let variable
+
+let scrollerInterval = null;
 
 generateButton.addEventListener('click', generatePassword);
 copyButton.addEventListener('click', copyPassword);
@@ -29,8 +31,13 @@ function generatePassword() {
     return;
   }
 
-  if (isNaN(passwordLength)) {
-    alert('Password length must be a number');
+  if (isNaN(passwordLength) || passwordLength <= 0) {
+    alert('Password length must be a positive integer');
+    return;
+  }
+
+  if (!CHARACTER_SETS[characterSet]) {
+    alert('Invalid character set selected');
     return;
   }
 
@@ -89,7 +96,7 @@ function getPasswordStrength(password) {
     case 5:
       return 'Very Strong';
     default:
-      return 'Unknown'; // add a default case
+      return 'Unknown';
   }
 }
 
